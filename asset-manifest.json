@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/static/js/main.e7e94c16.chunk.js",
-    "main.js.map": "/static/js/main.e7e94c16.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.248907bc.js",
-    "runtime-main.js.map": "/static/js/runtime-main.248907bc.js.map",
-    "static/js/2.13cbb30b.chunk.js": "/static/js/2.13cbb30b.chunk.js",
-    "static/js/2.13cbb30b.chunk.js.map": "/static/js/2.13cbb30b.chunk.js.map",
-    "index.html": "/index.html",
-    "static/js/2.13cbb30b.chunk.js.LICENSE.txt": "/static/js/2.13cbb30b.chunk.js.LICENSE.txt"
+    "main.js": "/blockchess/static/js/main.cfa8421b.chunk.js",
+    "main.js.map": "/blockchess/static/js/main.cfa8421b.chunk.js.map",
+    "runtime-main.js": "/blockchess/static/js/runtime-main.926081b8.js",
+    "runtime-main.js.map": "/blockchess/static/js/runtime-main.926081b8.js.map",
+    "static/js/2.13cbb30b.chunk.js": "/blockchess/static/js/2.13cbb30b.chunk.js",
+    "static/js/2.13cbb30b.chunk.js.map": "/blockchess/static/js/2.13cbb30b.chunk.js.map",
+    "index.html": "/blockchess/index.html",
+    "static/js/2.13cbb30b.chunk.js.LICENSE.txt": "/blockchess/static/js/2.13cbb30b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.248907bc.js",
+    "static/js/runtime-main.926081b8.js",
     "static/js/2.13cbb30b.chunk.js",
-    "static/js/main.e7e94c16.chunk.js"
+    "static/js/main.cfa8421b.chunk.js"
   ]
 }
