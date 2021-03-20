@@ -6,6 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import theme from './theme';
 import * as nearAPI from 'near-api-js';
+import 'react-chessground/dist/styles/chessground.css'
 
 // Initializing contract
 async function initContract() {
