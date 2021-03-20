@@ -1,17 +1,23 @@
 {
   "files": {
-    "main.js": "/blockchess/static/js/main.70c7b395.chunk.js",
-    "main.js.map": "/blockchess/static/js/main.70c7b395.chunk.js.map",
-    "runtime-main.js": "/blockchess/static/js/runtime-main.8ca2d07d.js",
-    "runtime-main.js.map": "/blockchess/static/js/runtime-main.8ca2d07d.js.map",
-    "static/js/2.2efd5830.chunk.js": "/blockchess/static/js/2.2efd5830.chunk.js",
-    "static/js/2.2efd5830.chunk.js.map": "/blockchess/static/js/2.2efd5830.chunk.js.map",
+    "main.js": "/blockchess/static/js/main.16add981.chunk.js",
+    "main.js.map": "/blockchess/static/js/main.16add981.chunk.js.map",
+    "runtime-main.js": "/blockchess/static/js/runtime-main.4085ef27.js",
+    "runtime-main.js.map": "/blockchess/static/js/runtime-main.4085ef27.js.map",
+    "static/css/2.b6086e5d.chunk.css": "/blockchess/static/css/2.b6086e5d.chunk.css",
+    "static/js/2.26e47e5f.chunk.js": "/blockchess/static/js/2.26e47e5f.chunk.js",
+    "static/js/2.26e47e5f.chunk.js.map": "/blockchess/static/js/2.26e47e5f.chunk.js.map",
     "index.html": "/blockchess/index.html",
-    "static/js/2.2efd5830.chunk.js.LICENSE.txt": "/blockchess/static/js/2.2efd5830.chunk.js.LICENSE.txt"
+    "precache-manifest.4714deeda084839facd0839641d34deb.js": "/blockchess/precache-manifest.4714deeda084839facd0839641d34deb.js",
+    "service-worker.js": "/blockchess/service-worker.js",
+    "static/css/2.b6086e5d.chunk.css.map": "/blockchess/static/css/2.b6086e5d.chunk.css.map",
+    "static/js/2.26e47e5f.chunk.js.LICENSE.txt": "/blockchess/static/js/2.26e47e5f.chunk.js.LICENSE.txt",
+    "static/media/chessground.css": "/blockchess/static/media/wR.57350123.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.8ca2d07d.js",
-    "static/js/2.2efd5830.chunk.js",
-    "static/js/main.70c7b395.chunk.js"
+    "static/js/runtime-main.4085ef27.js",
+    "static/css/2.b6086e5d.chunk.css",
+    "static/js/2.26e47e5f.chunk.js",
+    "static/js/main.16add981.chunk.js"
   ]
 }
