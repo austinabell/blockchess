@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import getConfig from './config.js';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './theme';
 import * as nearAPI from 'near-api-js';
 
 // Initializing contract
@@ -21,7 +24,7 @@ async function initContract() {
 
   // Load in account data
   let currentUser;
-  if(walletConnection.getAccountId()) {
+  if (walletConnection.getAccountId()) {
     currentUser = {
       accountId: walletConnection.getAccountId(),
       balance: (await walletConnection.account().state()).amount
@@ -45,12 +48,15 @@ async function initContract() {
 window.nearInitPromise = initContract()
   .then(({ contract, currentUser, nearConfig, walletConnection }) => {
     ReactDOM.render(
-      <App
-        contract={contract}
-        currentUser={currentUser}
-        nearConfig={nearConfig}
-        wallet={walletConnection}
-      />,
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App
+          contract={contract}
+          currentUser={currentUser}
+          nearConfig={nearConfig}
+          wallet={walletConnection}
+        />
+      </ThemeProvider>,
       document.getElementById('root')
     );
   });
