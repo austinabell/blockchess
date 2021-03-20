@@ -1,5 +1,5 @@
 import 'regenerator-runtime/runtime';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 // import Big from 'big.js';
 import { Button, Typography } from '@material-ui/core';

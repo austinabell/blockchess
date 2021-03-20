@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "http://austinabell.github.io/blockchess",
+  "license": "GPL-3.0",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@testing-library/jest-dom": "^5.11.4",
@@ -11,6 +12,7 @@
     "near-api-js": "^0.39.0",
     "near-seed-phrase": "^0.1.1",
     "react": "^17.0.1",
+    "react-chessground": "^1.5.0",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1"
