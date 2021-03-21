@@ -12,7 +12,9 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended"
+        "plugin:react/recommended",
+        "plugin:prettier/recommended",
+        "prettier"
     ],
     "parserOptions": {
         "ecmaFeatures": {
@@ -23,10 +25,12 @@
     },
     "plugins": [
         "react",
-        "jest"
+        "jest",
+        "prettier"
     ],
     "rules": {
         "no-console": "warn",
-        "no-eval": "error"
+        "no-eval": "error",
+        "prettier/prettier": ["error"]
     }
 }

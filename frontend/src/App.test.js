@@ -3,7 +3,7 @@
 // import App from './App';
 
 // test('renders header', () => {
-  // const { getByText } = render(<App />);
-  // const header = getByText(/Proof of Work Faucet/i);
-  // expect(header).toBeInTheDocument();
+// const { getByText } = render(<App />);
+// const header = getByText(/Proof of Work Faucet/i);
+// expect(header).toBeInTheDocument();
 // });

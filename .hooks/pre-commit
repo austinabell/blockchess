@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+make lint
+
+if [ $? != 0 ]; then
+	printf "[lint failed] \033[0;31merror\033[0m\n"
+	exit 1
+fi
+
+exit 0

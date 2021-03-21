@@ -27,6 +27,13 @@ test-frontend:
 	cd frontend && yarn test
 
 test: build test-cargo test-frontend
-	
 
-.PHONY: build deploy-contract deploy-pages deploy deploy-dev start-frontend start test-cargo test-frontend test
+lint-frontend:
+	cd frontend && yarn lint:fix
+
+lint: lint-frontend
+
+pre-commit-hook:
+	cd .git/hooks/ && ln -s -f ../../.hooks/pre-commit
+
+.PHONY: build deploy-contract deploy-pages deploy deploy-dev start-frontend start test-cargo test-frontend test lint lint-frontend pre-commit-hook
