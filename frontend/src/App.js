@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
-  const [chess, ] = useState(new Chess());
+  const [chess,] = useState(new Chess());
   const [pendingMove, setPendingMove] = useState();
   const [modalOpen, setModalOpen] = useState(false);
   const [fen, setFen] = useState("");
