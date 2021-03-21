@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import getConfig from "./config.js";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {ThemeProvider} from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
 import * as nearAPI from "near-api-js";
 import "react-chessground/dist/styles/chessground.css";
@@ -47,11 +47,11 @@ async function initContract() {
     }
   );
 
-  return {contract, currentUser, nearConfig, walletConnection};
+  return { contract, currentUser, nearConfig, walletConnection };
 }
 
 window.nearInitPromise = initContract().then(
-  ({contract, currentUser, nearConfig, walletConnection}) => {
+  ({ contract, currentUser, nearConfig, walletConnection }) => {
     ReactDOM.render(
       <ThemeProvider theme={theme}>
         <CssBaseline />

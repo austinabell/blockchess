@@ -2,7 +2,7 @@ import "regenerator-runtime/runtime";
 import React from "react";
 import TestRenderer from "react-test-renderer";
 import App from "../../App";
-const {act} = TestRenderer;
+const { act } = TestRenderer;
 
 // Declare stubs for contract, walletConnection, and nearConfig
 const contract = {
@@ -15,7 +15,7 @@ const contract = {
   addMessage: () => "",
 };
 const walletConnection = {
-  account: () => ({_state: {amount: "1" + "0".repeat(25)}}),
+  account: () => ({ _state: { amount: "1" + "0".repeat(25) } }),
   requestSignIn: () => null,
   signOut: () => null,
   isSignedIn: () => false,
@@ -47,7 +47,11 @@ it("renders with proper title", () => {
 
   act(() => {
     testRenderer = TestRenderer.create(
-      <App contract={contract} wallet={walletConnection} nearConfig={nearConfig} />
+      <App
+        contract={contract}
+        wallet={walletConnection}
+        nearConfig={nearConfig}
+      />
     );
   });
 

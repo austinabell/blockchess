@@ -1,10 +1,10 @@
 import "regenerator-runtime/runtime";
-import React, {useState, useEffect, Fragment} from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import Chess from "chess.js";
-import {Button, Typography, Modal} from "@material-ui/core";
+import { Button, Typography, Modal } from "@material-ui/core";
 import SignIn from "./components/SignIn";
-import {makeStyles} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Chessground from "react-chessground";
 import queen from "./images/wQ.svg";
 import rook from "./images/wR.svg";
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const App = ({contract, currentUser, nearConfig, wallet}) => {
+const App = ({ contract, currentUser, nearConfig, wallet }) => {
   const [chess] = useState(new Chess());
   const [pendingMove, setPendingMove] = useState();
   const [modalOpen, setModalOpen] = useState(false);
@@ -79,7 +79,7 @@ const App = ({contract, currentUser, nearConfig, wallet}) => {
   };
 
   const onMove = (from, to) => {
-    const moves = chess.moves({verbose: true});
+    const moves = chess.moves({ verbose: true });
     for (let i = 0, len = moves.length; i < len; i++) { /* eslint-disable-line */
       if (moves[i].flags.indexOf("p") !== -1 && moves[i].from === from) {
         setPendingMove([from, to]);
@@ -87,7 +87,7 @@ const App = ({contract, currentUser, nearConfig, wallet}) => {
         return;
       }
     }
-    if (chess.move({from, to, promotion: "x"})) {
+    if (chess.move({ from, to, promotion: "x" })) {
       setFen(chess.fen());
       setLastMove([from, to]);
       setTimeout(randomMove, 500);
@@ -95,7 +95,7 @@ const App = ({contract, currentUser, nearConfig, wallet}) => {
   };
 
   const randomMove = () => {
-    const moves = chess.moves({verbose: true});
+    const moves = chess.moves({ verbose: true });
     const move = moves[Math.floor(Math.random() * moves.length)];
     if (moves.length > 0) {
       chess.move(move.san);
@@ -107,7 +107,7 @@ const App = ({contract, currentUser, nearConfig, wallet}) => {
   const promotion = (e) => {
     const from = pendingMove[0];
     const to = pendingMove[1];
-    chess.move({from, to, promotion: e});
+    chess.move({ from, to, promotion: e });
     setFen(chess.fen());
     setLastMove([from, to]);
     setModalOpen(false);
@@ -139,7 +139,7 @@ const App = ({contract, currentUser, nearConfig, wallet}) => {
             lastMove={lastMove}
             fen={fen}
             onMove={onMove}
-            style={{margin: "auto"}}
+            style={{ margin: "auto" }}
           />
           <Modal
             open={modalOpen}
@@ -149,16 +149,16 @@ const App = ({contract, currentUser, nearConfig, wallet}) => {
           >
             <div className={classes.paper}>
               <span role="presentation" onClick={() => promotion("q")}>
-                <img src={queen} alt="" style={{width: 50}} />
+                <img src={queen} alt="" style={{ width: 50 }} />
               </span>
               <span role="presentation" onClick={() => promotion("r")}>
-                <img src={rook} alt="" style={{width: 50}} />
+                <img src={rook} alt="" style={{ width: 50 }} />
               </span>
               <span role="presentation" onClick={() => promotion("b")}>
-                <img src={bishop} alt="" style={{width: 50}} />
+                <img src={bishop} alt="" style={{ width: 50 }} />
               </span>
               <span role="presentation" onClick={() => promotion("n")}>
-                <img src={knight} alt="" style={{width: 50}} />
+                <img src={knight} alt="" style={{ width: 50 }} />
               </span>
             </div>
           </Modal>

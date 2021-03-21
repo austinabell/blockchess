@@ -19,7 +19,7 @@ beforeAll(async function () {
 });
 
 it("send one message and retrieve it", async () => {
-  await contract.addMessage({text: "aloha"});
+  await contract.addMessage({ text: "aloha" });
   const msgs = await contract.getMessages();
   const expectedMessagesResult = [
     {
@@ -32,8 +32,8 @@ it("send one message and retrieve it", async () => {
 });
 
 it("send two more messages and expect three total", async () => {
-  await contract.addMessage({text: "foo"});
-  await contract.addMessage({text: "bar"});
+  await contract.addMessage({ text: "foo" });
+  await contract.addMessage({ text: "bar" });
   const msgs = await contract.getMessages();
   expect(msgs.length).toEqual(3);
 });
