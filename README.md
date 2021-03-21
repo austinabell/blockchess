@@ -5,7 +5,7 @@ BlockChess
 Install dependencies:
 
 ```
-yarn
+make frontend-deps
 ```
 
 If you don't have `Rust` installed, complete the following 3 steps:
@@ -62,7 +62,7 @@ const CONTRACT_NAME = 'YOUR_ACCOUNT_NAME_HERE'; /* TODO: fill this in! */
 Start the example!
 
 ```
-yarn start
+make start
 ```
 
 ## To Test
