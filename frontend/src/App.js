@@ -1,5 +1,5 @@
 import "regenerator-runtime/runtime";
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Chess from "chess.js";
 import { Button, Typography, Modal } from "@material-ui/core";
@@ -24,13 +24,13 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
 }));
 
-const App = ({ contract, currentUser, nearConfig, wallet }) => {
+// TODO include contract
+const App = ({ currentUser, nearConfig, wallet }) => {
   const [chess] = useState(new Chess());
   const [pendingMove, setPendingMove] = useState();
   const [modalOpen, setModalOpen] = useState(false);
@@ -42,7 +42,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
   useEffect(() => {
     // // TODO: don't just fetch once; subscribe!
     // contract.getMessages().then(setMessages);
-  }, [contract]);
+  }, []);
 
   // const onSubmit = (e) => {
   //   e.preventDefault();
@@ -119,7 +119,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
   };
 
   return (
-    <Fragment>
+    <>
       <Typography variant="h2" component="h2" gutterBottom>
         BlockChess
       </Typography>
@@ -133,7 +133,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
         </Button>
       )}
       {currentUser ? (
-        <Fragment>
+        <>
           <Chessground
             turnColor={turnColor()}
             lastMove={lastMove}
@@ -162,12 +162,12 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
               </span>
             </div>
           </Modal>
-        </Fragment>
+        </>
       ) : (
         <SignIn />
       )}
       {/* {!!currentUser && !!messages.length && <Messages messages={messages} />} */}
-    </Fragment>
+    </>
   );
 };
 
