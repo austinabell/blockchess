@@ -21,7 +21,8 @@ start-frontend: frontend-deps
 
 start: deploy start-frontend
 
-test-cargo: cd contract && cargo test -- --nocapture
+test-cargo: 
+	cd contract && cargo test -- --nocapture
 
 test-frontend:
 	cd frontend && yarn test

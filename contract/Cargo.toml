@@ -1,5 +1,5 @@
 [package]
-name = "rust-counter-tutorial"
+name = "blockchess"
 version = "0.1.0"
 authors = ["Near Inc <hello@near.org>"]
 edition = "2018"
@@ -9,6 +9,8 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 near-sdk = "3.0.0-pre.2"
+chess = "3.2"
+serde = "1.0"
 
 [profile.release]
 codegen-units = 1
