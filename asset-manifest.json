@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/blockchess/static/js/main.9a0383e7.chunk.js",
-    "main.js.map": "/blockchess/static/js/main.9a0383e7.chunk.js.map",
+    "main.js": "/blockchess/static/js/main.dd4667e8.chunk.js",
+    "main.js.map": "/blockchess/static/js/main.dd4667e8.chunk.js.map",
     "runtime-main.js": "/blockchess/static/js/runtime-main.4085ef27.js",
     "runtime-main.js.map": "/blockchess/static/js/runtime-main.4085ef27.js.map",
     "static/css/2.b6086e5d.chunk.css": "/blockchess/static/css/2.b6086e5d.chunk.css",
     "static/js/2.4b449c00.chunk.js": "/blockchess/static/js/2.4b449c00.chunk.js",
     "static/js/2.4b449c00.chunk.js.map": "/blockchess/static/js/2.4b449c00.chunk.js.map",
     "index.html": "/blockchess/index.html",
-    "precache-manifest.87a772d975acf49417743fc344cadd2f.js": "/blockchess/precache-manifest.87a772d975acf49417743fc344cadd2f.js",
+    "precache-manifest.937547127970fe10ec4b7c5a7d977972.js": "/blockchess/precache-manifest.937547127970fe10ec4b7c5a7d977972.js",
     "service-worker.js": "/blockchess/service-worker.js",
     "static/css/2.b6086e5d.chunk.css.map": "/blockchess/static/css/2.b6086e5d.chunk.css.map",
     "static/js/2.4b449c00.chunk.js.LICENSE.txt": "/blockchess/static/js/2.4b449c00.chunk.js.LICENSE.txt",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.4085ef27.js",
     "static/css/2.b6086e5d.chunk.css",
     "static/js/2.4b449c00.chunk.js",
-    "static/js/main.9a0383e7.chunk.js"
+    "static/js/main.dd4667e8.chunk.js"
   ]
 }
