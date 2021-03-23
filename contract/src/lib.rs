@@ -97,14 +97,43 @@ impl ChessContract {
         None
     }
 
-    /// Accepts challenge
-    pub fn accept_challenge(&mut self, _board: u64) {
-        // lookup board
+    /// Creates an uninitialized game with the signer as the challenger.
+    pub fn create_game(&mut self) -> u64 {
+        let game_index = self.game_idx;
+        self.games.insert(
+            &game_index,
+            &ChessGame::Pending {
+                challenger: env::signer_account_id(),
+            },
+        );
+        self.game_idx += 1;
 
-        // If caller can join, randomly choose sides and initialize game
-        // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+        game_index
     }
 
+    /// Accepts challenge and initializes the game.
+    pub fn accept_challenge(&mut self, board: u64) {
+        // lookup board
+        let game = self.games.get(&board).expect("Invalid board number");
+
+        // If caller can join, randomly choose sides and initialize game
+        if let ChessGame::Pending { challenger } = game {
+            self.games.insert(
+                &board,
+                &ChessGame::Initialized {
+                    white: challenger,
+                    black: env::signer_account_id(),
+                    board_fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+                        .to_string(),
+                    winner: None,
+                },
+            );
+        } else {
+            panic!("Game has already been initialized");
+        }
+    }
+
+    /// Performs move on initialized board.
     pub fn make_move(&mut self, _board: u64, _m: String) {
         // Convert input to move
 
