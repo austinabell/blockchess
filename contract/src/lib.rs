@@ -1,4 +1,4 @@
-use chess::{Board, BoardStatus, ChessMove, Color as ChessColor};
+use chess::{ChessMove, Color as ChessColor, Game, GameResult};
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
     collections::LookupMap,
@@ -27,6 +27,9 @@ pub enum ChessGame {
         /// Account ID for black pieces.
         black: AccountId,
         /// Forsyth-Edwards Notation of board.
+        // TODO fen has limitations, would be more expensive on storage potentially, but
+        // would be preferable to store history and recreate state on frontend, unless also
+        // storing repetition moves to validate against that draw
         board_fen: String,
         /// Indicates status of the game
         state: GameState,
@@ -170,7 +173,7 @@ impl ChessContract {
             let play: ChessMove = m.parse().expect("invalid chess move format");
 
             // Try to apply move if caller's turn
-            let board_state: Board = board_fen.parse().expect("Invalid board state");
+            let mut board_state: Game = board_fen.parse().expect("Invalid board state");
             let caller = env::signer_account_id();
             let caller_color = if caller == white {
                 ChessColor::White
@@ -186,19 +189,21 @@ impl ChessContract {
                 "Signer cannot move for the other side"
             );
 
-            assert!(board_state.legal(play), "Not a legal move");
-            let new_board = board_state.make_move_new(play);
+            let valid = board_state.make_move(play);
+            assert!(valid, "Invalid move");
 
             // Check board state for finished game
-            match new_board.status() {
-                BoardStatus::Checkmate => {
-                    env::log(format!("{} won the game", caller).as_bytes());
-                    state = GameState::Win(Color::from(caller_color));
+            if let Some(finished) = board_state.result() {
+                match finished {
+                    GameResult::WhiteCheckmates | GameResult::BlackCheckmates => {
+                        env::log(format!("{} won the game", caller).as_bytes());
+                        state = GameState::Win(Color::from(caller_color));
+                    }
+                    GameResult::Stalemate | GameResult::DrawDeclared => {
+                        env::log("Game ended in a draw".as_bytes());
+                    }
+                    _ => (),
                 }
-                BoardStatus::Stalemate => {
-                    env::log("Game ended in a stalemate".as_bytes());
-                }
-                BoardStatus::Ongoing => (),
             }
 
             // Save game back to storage
@@ -207,7 +212,7 @@ impl ChessContract {
                 &ChessGame::Initialized {
                     white,
                     black,
-                    board_fen: new_board.to_string(),
+                    board_fen: board_state.current_position().to_string(),
                     state,
                 },
             );
@@ -305,7 +310,7 @@ mod tests {
         {
             assert_eq!(
                 board_fen,
-                // TODO chess logic is broken, ignores en passant and move counter
+                // TODO chess logic is incomplete, ignores en passant and move counter
                 // "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3"
                 "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 0 1"
             );
