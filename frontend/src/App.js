@@ -1,7 +1,7 @@
 import "regenerator-runtime/runtime";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Chess from "chess.js";
+import { Chess } from "chess.js";
 import { Button, Typography, Modal } from "@material-ui/core";
 import SignIn from "./components/SignIn";
 import { makeStyles } from "@material-ui/core/styles";
@@ -173,8 +173,10 @@ const App = ({ currentUser, nearConfig, wallet }) => {
 
 App.propTypes = {
   contract: PropTypes.shape({
-    addMessage: PropTypes.func.isRequired,
-    getMessages: PropTypes.func.isRequired,
+    getBoardState: PropTypes.func.isRequired,
+    createGame: PropTypes.func.isRequired,
+    acceptChallenge: PropTypes.func.isRequired,
+    makeMove: PropTypes.func.isRequired,
   }).isRequired,
   currentUser: PropTypes.shape({
     accountId: PropTypes.string.isRequired,

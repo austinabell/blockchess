@@ -1,8 +1,7 @@
 import "regenerator-runtime/runtime";
 import React from "react";
-import TestRenderer from "react-test-renderer";
 import App from "../../App";
-const { act } = TestRenderer;
+import { render, screen } from "@testing-library/react";
 
 // Declare stubs for contract, walletConnection, and nearConfig
 const contract = {
@@ -11,8 +10,10 @@ const contract = {
     accountId: "test.near",
   },
   contractId: "test.near",
-  getMessages: () => new Promise(() => {}),
-  addMessage: () => "",
+  getBoardState: () => new Promise(() => {}),
+  createGame: () => "",
+  acceptChallenge: () => "",
+  makeMove: () => "",
 };
 const walletConnection = {
   account: () => ({ _state: { amount: "1" + "0".repeat(25) } }),
@@ -43,19 +44,14 @@ afterEach(() => {
 });
 
 it("renders with proper title", () => {
-  let testRenderer;
+  render(
+    <App
+      contract={contract}
+      wallet={walletConnection}
+      nearConfig={nearConfig}
+    />
+  );
 
-  act(() => {
-    testRenderer = TestRenderer.create(
-      <App
-        contract={contract}
-        wallet={walletConnection}
-        nearConfig={nearConfig}
-      />
-    );
-  });
-
-  const testInstance = testRenderer.root;
-
-  expect(testInstance.findByType("h1").children).toEqual(["NEAR Guest Book"]);
+  const linkElement = screen.getByText(/BlockChess/i);
+  expect(linkElement).toBeInTheDocument();
 });
