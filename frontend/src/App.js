@@ -10,6 +10,7 @@ import queen from "./images/wQ.svg";
 import rook from "./images/wR.svg";
 import bishop from "./images/wB.svg";
 import knight from "./images/wN.svg";
+import { Switch, Route } from "react-router-dom";
 
 // const SUGGESTED_DONATION = '0';
 // const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
@@ -120,48 +121,67 @@ const App = ({ currentUser, nearConfig, wallet }) => {
 
   return (
     <>
+      {currentUser ? (
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ float: "right" }}
+          onClick={signOut}
+        >
+          Log out
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ float: "right" }}
+          onClick={signIn}
+        >
+          Log in
+        </Button>
+      )}
       <Typography variant="h2" component="h2" gutterBottom>
         BlockChess
       </Typography>
       {currentUser ? (
-        <Button variant="contained" color="secondary" onClick={signOut}>
-          Log out
-        </Button>
-      ) : (
-        <Button variant="contained" color="secondary" onClick={signIn}>
-          Log in
-        </Button>
-      )}
-      {currentUser ? (
         <>
-          <Chessground
-            turnColor={turnColor()}
-            lastMove={lastMove}
-            fen={fen}
-            onMove={onMove}
-            style={{ margin: "auto" }}
-          />
-          <Modal
-            open={modalOpen}
-            className={classes.modal}
-            aria-labelledby="simple-modal-title"
-            aria-describedby="simple-modal-description"
-          >
-            <div className={classes.paper}>
-              <span role="presentation" onClick={() => promotion("q")}>
-                <img src={queen} alt="" style={{ width: 50 }} />
-              </span>
-              <span role="presentation" onClick={() => promotion("r")}>
-                <img src={rook} alt="" style={{ width: 50 }} />
-              </span>
-              <span role="presentation" onClick={() => promotion("b")}>
-                <img src={bishop} alt="" style={{ width: 50 }} />
-              </span>
-              <span role="presentation" onClick={() => promotion("n")}>
-                <img src={knight} alt="" style={{ width: 50 }} />
-              </span>
-            </div>
-          </Modal>
+          <Switch>
+            <Route exact path="/">
+              TODO: create game homepage
+            </Route>
+            <Route path="/:id">
+              <>
+                <Chessground
+                  turnColor={turnColor()}
+                  lastMove={lastMove}
+                  fen={fen}
+                  onMove={onMove}
+                  style={{ margin: "auto" }}
+                />
+                <Modal
+                  open={modalOpen}
+                  className={classes.modal}
+                  aria-labelledby="simple-modal-title"
+                  aria-describedby="simple-modal-description"
+                >
+                  <div className={classes.paper}>
+                    <span role="presentation" onClick={() => promotion("q")}>
+                      <img src={queen} alt="" style={{ width: 50 }} />
+                    </span>
+                    <span role="presentation" onClick={() => promotion("r")}>
+                      <img src={rook} alt="" style={{ width: 50 }} />
+                    </span>
+                    <span role="presentation" onClick={() => promotion("b")}>
+                      <img src={bishop} alt="" style={{ width: 50 }} />
+                    </span>
+                    <span role="presentation" onClick={() => promotion("n")}>
+                      <img src={knight} alt="" style={{ width: 50 }} />
+                    </span>
+                  </div>
+                </Modal>
+              </>
+            </Route>
+          </Switch>
         </>
       ) : (
         <SignIn />

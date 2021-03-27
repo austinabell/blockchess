@@ -6,7 +6,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
 import * as nearAPI from "near-api-js";
+import { HashRouter } from "react-router-dom";
 import "react-chessground/dist/styles/chessground.css";
+import "./app.css";
 
 // Initializing contract
 async function initContract() {
@@ -55,12 +57,14 @@ window.nearInitPromise = initContract().then(
     ReactDOM.render(
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <App
-          contract={contract}
-          currentUser={currentUser}
-          nearConfig={nearConfig}
-          wallet={walletConnection}
-        />
+        <HashRouter>
+          <App
+            contract={contract}
+            currentUser={currentUser}
+            nearConfig={nearConfig}
+            wallet={walletConnection}
+          />
+        </HashRouter>
       </ThemeProvider>,
       document.getElementById("root")
     );
