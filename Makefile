@@ -1,6 +1,6 @@
 build:
 	cd contract && cargo build --target wasm32-unknown-unknown --release
-	cp contract/target/wasm32-unknown-unknown/release/rust_counter_tutorial.wasm ./out/main.wasm
+	cp contract/target/wasm32-unknown-unknown/release/blockchess.wasm ./out/main.wasm
 
 deploy-contract:
 	near deploy
