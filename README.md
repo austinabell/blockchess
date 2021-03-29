@@ -1,87 +1,102 @@
 BlockChess
-=================================
+==================
 
-## Setup
-Install dependencies:
+This [React] app was initialized with [create-near-app]
 
-```
-make frontend-deps
-```
 
-If you don't have `Rust` installed, complete the following 3 steps:
+Quick Start
+===========
 
-1) Install Rustup by running:
+To run this project locally:
 
-```
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
+1. Prerequisites: Make sure you've installed [Node.js] ≥ 12
+2. Install dependencies: `yarn install`
+3. Run the local development server: `yarn dev` (see `package.json` for a
+   full list of `scripts` you can run with `yarn`)
 
-([Taken from official installation guide](https://www.rust-lang.org/tools/install))
+Now you'll have a local development environment backed by the NEAR TestNet!
 
-2) Configure your current shell by running:
+Go ahead and play with the app and the code. As you make code changes, the app will automatically reload.
 
-```
-source $HOME/.cargo/env
-```
 
-3) Add wasm target to your toolchain by running:
+Exploring The Code
+==================
 
-```
-rustup target add wasm32-unknown-unknown
-```
+1. The "backend" code lives in the `/contract` folder. See the README there for
+   more info.
+2. The frontend code lives in the `/src` folder. `/src/index.html` is a great
+   place to start exploring. Note that it loads in `/src/index.js`, where you
+   can learn how the frontend connects to the NEAR blockchain.
+3. Tests: there are different kinds of tests for the frontend and the smart
+   contract. See `contract/README` for info about how it's tested. The frontend
+   code gets tested with [jest]. You can run both of these at once with `yarn
+   run test`.
 
-Next, make sure you have `near-cli` by running:
 
-```
-near --version
-```
+Deploy
+======
 
-If you need to install `near-cli`:
+Every smart contract in NEAR has its [own associated account][NEAR accounts]. When you run `yarn dev`, your smart contract gets deployed to the live NEAR TestNet with a throwaway account. When you're ready to make it permanent, here's how.
 
-```
-npm install near-cli -g
-```
 
-## Login
-If you do not have a NEAR account, please create one with [NEAR Wallet](https://wallet.testnet.near.org).
+Step 0: Install near-cli (optional)
+-------------------------------------
 
-In the project root, login with `near-cli` by following the instructions after this command:
+[near-cli] is a command line interface (CLI) for interacting with the NEAR blockchain. It was installed to the local `node_modules` folder when you ran `yarn install`, but for best ergonomics you may want to install it globally:
 
-```
-near login
-```
+    yarn install --global near-cli
 
-Modify the top of `src/config.js`, changing the `CONTRACT_NAME` to be the NEAR account that was just used to log in.
+Or, if you'd rather use the locally-installed version, you can prefix all `near` commands with `npx`
 
-```javascript
-…
-const CONTRACT_NAME = 'YOUR_ACCOUNT_NAME_HERE'; /* TODO: fill this in! */
-…
-```
+Ensure that it's installed with `near --version` (or `npx near --version`)
 
-Start the example!
 
-```
-make start
-```
+Step 1: Create an account for the contract
+------------------------------------------
 
-## To Test
+Each account on NEAR can have at most one contract deployed to it. If you've already created an account such as `your-name.testnet`, you can deploy your contract to `blockchess.your-name.testnet`. Assuming you've already created an account on [NEAR Wallet], here's how to create `blockchess.your-name.testnet`:
 
-```
-cd contract
-cargo test -- --nocapture
-```
+1. Authorize NEAR CLI, following the commands it gives you:
 
-## To Explore
+      near login
 
-- `contract/src/lib.rs` for the contract code
-- `src/index.html` for the front-end HTML
-- `src/main.js` for the JavaScript front-end code and how to integrate contracts
-- `src/test.js` for the JS tests for the contract
+2. Create a subaccount (replace `YOUR-NAME` below with your actual account name):
 
-## To Build the Documentation
+      near create-account blockchess.YOUR-NAME.testnet --masterAccount YOUR-NAME.testnet
 
-```
-cd contract
-cargo doc --no-deps --open
-```
+
+Step 2: set contract name in code
+---------------------------------
+
+Modify the line in `src/config.js` that sets the account name of the contract. Set it to the account id you used above.
+
+    const CONTRACT_NAME = process.env.CONTRACT_NAME || 'blockchess.YOUR-NAME.testnet'
+
+
+Step 3: deploy!
+---------------
+
+One command:
+
+    yarn deploy
+
+As you can see in `package.json`, this does two things:
+
+1. builds & deploys smart contract to NEAR TestNet
+2. builds & deploys frontend code to GitHub using [gh-pages]. This will only work if the project already has a repository set up on GitHub. Feel free to modify the `deploy` script in `package.json` to deploy elsewhere.
+
+
+Troubleshooting
+===============
+
+On Windows, if you're seeing an error containing `EPERM` it may be related to spaces in your path. Please see [this issue](https://github.com/zkat/npx/issues/209) for more details.
+
+
+  [React]: https://reactjs.org/
+  [create-near-app]: https://github.com/near/create-near-app
+  [Node.js]: https://nodejs.org/en/download/package-manager/
+  [jest]: https://jestjs.io/
+  [NEAR accounts]: https://docs.near.org/docs/concepts/account
+  [NEAR Wallet]: https://wallet.testnet.near.org/
+  [near-cli]: https://github.com/near/near-cli
+  [gh-pages]: https://github.com/tschaub/gh-pages

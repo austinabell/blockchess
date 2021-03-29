@@ -1,7 +1,7 @@
 [package]
 name = "blockchess"
 version = "0.1.0"
-authors = ["Near Inc <hello@near.org>"]
+authors = ["austinabell <austinabell8@gmail.com>"]
 edition = "2018"
 
 [lib]
@@ -21,3 +21,6 @@ debug = false
 panic = "abort"
 # Opt into extra safety checks on arithmetic operations https://stackoverflow.com/a/64136471/249801
 overflow-checks = true
+
+[workspace]
+members = []
