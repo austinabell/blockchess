@@ -240,37 +240,35 @@ function ChessGame() {
 
   return (
     <>
-      <>
-        <Chessground
-          turnColor={turnColor()}
-          // TODO have a way to show last move
-          lastMove={lastMove}
-          fen={fen}
-          onMove={onMove}
-          style={{ margin: "auto" }}
-        />
-        <Modal
-          open={modalOpen}
-          className={classes.modal}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-        >
-          <div className={classes.paper}>
-            <span role="presentation" onClick={() => promotion("q")}>
-              <img src={queen} alt="" style={{ width: 50 }} />
-            </span>
-            <span role="presentation" onClick={() => promotion("r")}>
-              <img src={rook} alt="" style={{ width: 50 }} />
-            </span>
-            <span role="presentation" onClick={() => promotion("b")}>
-              <img src={bishop} alt="" style={{ width: 50 }} />
-            </span>
-            <span role="presentation" onClick={() => promotion("n")}>
-              <img src={knight} alt="" style={{ width: 50 }} />
-            </span>
-          </div>
-        </Modal>
-      </>
+      <Chessground
+        turnColor={turnColor()}
+        // TODO have a way to show last move
+        lastMove={lastMove}
+        fen={fen}
+        onMove={onMove}
+        style={{ margin: "auto" }}
+      />
+      <Modal
+        open={modalOpen}
+        className={classes.modal}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <div className={classes.paper}>
+          <span role="presentation" onClick={() => promotion("q")}>
+            <img src={queen} alt="" style={{ width: 50 }} />
+          </span>
+          <span role="presentation" onClick={() => promotion("r")}>
+            <img src={rook} alt="" style={{ width: 50 }} />
+          </span>
+          <span role="presentation" onClick={() => promotion("b")}>
+            <img src={bishop} alt="" style={{ width: 50 }} />
+          </span>
+          <span role="presentation" onClick={() => promotion("n")}>
+            <img src={knight} alt="" style={{ width: 50 }} />
+          </span>
+        </div>
+      </Modal>
     </>
   );
 }
