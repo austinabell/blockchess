@@ -42,16 +42,6 @@ export default function App() {
 
   const history = useHistory();
 
-  React.useEffect(() => {
-    if (window.walletConnection.isSignedIn()) {
-      // window.contract
-      //   .get_board_state({ account_id: window.accountId })
-      //   .then((greetingFromContract) => {
-      //     set_greeting(greetingFromContract);
-      //   });
-    }
-  }, []);
-
   const showNotification = (message) => {
     // show Notification
     setNotificationMsg(message);
@@ -101,9 +91,6 @@ export default function App() {
     );
     /* eslint-enable */
   }
-
-  const account = window.accountId;
-  console.log(account);
 
   return (
     <>
@@ -180,70 +167,103 @@ Notification.propTypes = {
 
 // this component gets rendered by App after the form is submitted
 function ChessGame() {
-  const [chess] = React.useState(new Chess());
   const [promoteMove, setPromoteMove] = React.useState();
   const [modalOpen, setModalOpen] = React.useState(false);
   const [fen, setFen] = React.useState("");
-  const [lastMove, setLastMove] = React.useState();
+  // const [lastMove, setLastMove] = React.useState();
+
+  // Just used to trigger board reload on invalid move
+  const [reload, setReload] = React.useState();
+
+  // Default to white for spectators, overrides if signed in account is in game
+  const [userColor, setUserColor] = React.useState("");
 
   const classes = useStyles();
 
   // react-router-dom parameters from route
   const { id } = useParams();
-  console.log("loading game: ", id);
+  const board = parseInt(id);
+
+  const account = window.accountId;
 
   // * Polls for new data. This would be much better to be subscription based, but this does
   // * not exist yet.
   useInterval(() => {
-    // console.log("interval");
+    window.contract
+      .get_board_state({ board })
+      .then((boardState) => {
+        if (boardState.challenger) {
+          // Game has not started
+          if (account != boardState.challenger) {
+            window.contract.accept_challenge({ board }).catch(console.error);
+          } else {
+            // Challenger is the currently signed in user
+            return;
+          }
+        }
+
+        // Game has been initialized
+        if (boardState.board_fen !== fen) {
+          setFen(boardState.board_fen);
+        }
+
+        if (boardState.white === account) {
+          setUserColor("white");
+        } else if (boardState.black === account) {
+          setUserColor("black");
+        }
+        console.debug(boardState);
+      })
+      .catch(console.error);
   }, 1000);
 
   const onMove = (from, to) => {
+    const chess = new Chess(fen);
     const moves = chess.moves({ verbose: true });
-    for (let i = 0, len = moves.length; i < len; i++) { /* eslint-disable-line */
+    for (let i = 0, len = moves.length; i < len; i++) {
       if (moves[i].flags.indexOf("p") !== -1 && moves[i].from === from) {
         setPromoteMove([from, to]);
         setModalOpen(true);
         return;
       }
     }
-    if (chess.move({ from, to, promotion: "x" })) {
-      setFen(chess.fen());
-      setLastMove([from, to]);
-      setTimeout(randomMove, 500);
-    }
-  };
 
-  const randomMove = () => {
-    const moves = chess.moves({ verbose: true });
-    const move = moves[Math.floor(Math.random() * moves.length)];
-    if (moves.length > 0) {
-      chess.move(move.san);
-      setFen(chess.fen());
-      setLastMove([move.from, move.to]);
+    if (chess.move({ from, to, promotion: "x" })) {
+      // Move is valid, send transaction to update state.
+      window.contract
+        .make_move({ board, m: `${from}${to}` })
+        .catch(console.error);
+    } else {
+      //* Manually triggering board reload on invalid move.
+      //* This should probably be handled diff, this is janky lol
+      setReload(!reload);
     }
   };
 
   const promotion = (e) => {
+    const chess = new Chess(fen);
     const from = promoteMove[0];
     const to = promoteMove[1];
     chess.move({ from, to, promotion: e });
-    setFen(chess.fen());
-    setLastMove([from, to]);
+
+    window.contract
+      .make_move({ board, m: `${from}${to}${e}` })
+      .catch(console.error);
     setModalOpen(false);
-    setTimeout(randomMove, 500);
   };
 
   const turnColor = () => {
+    const chess = new Chess(fen);
     return chess.turn() === "w" ? "white" : "black";
   };
 
   return (
     <>
       <Chessground
+        orientation={userColor || "white"}
         turnColor={turnColor()}
         // TODO have a way to show last move
-        lastMove={lastMove}
+        lastMove={null}
         fen={fen}
         onMove={onMove}
         style={{ margin: "auto" }}
