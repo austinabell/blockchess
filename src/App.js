@@ -1,10 +1,12 @@
 import "regenerator-runtime/runtime";
+import PropTypes from "prop-types";
 import React from "react";
 import { login, logout } from "./utils";
 import { Button, Typography, Modal } from "@material-ui/core";
 import { Chess } from "chess.js";
 import getConfig from "./config";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory, useParams } from "react-router-dom";
+import { useInterval } from "./interval";
 import Chessground from "react-chessground";
 import { makeStyles } from "@material-ui/core/styles";
 import queen from "./assets/wQ.svg";
@@ -32,85 +34,60 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function App() {
-  const [chess] = React.useState(new Chess());
-  const [pendingMove, setPendingMove] = React.useState();
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [fen, setFen] = React.useState("");
-  const [lastMove, setLastMove] = React.useState();
+  const [pendingReq, setPendingReq] = React.useState(false);
 
   // after submitting the form, we want to show Notification
   // eslint-disable-next-line no-unused-vars
-  const [showNotification, setShowNotification] = React.useState(false);
+  const [notificationMsg, setNotificationMsg] = React.useState("");
 
-  const classes = useStyles();
+  const history = useHistory();
 
-  // The useEffect hook can be used to fire side-effects during render
-  // Learn more: https://reactjs.org/docs/hooks-intro.html
-  React.useEffect(
-    () => {
-      if (window.walletConnection.isSignedIn()) {
-        // window.contract
-        //   .getBoardState({ account_id: window.accountId })
-        //   .then((greetingFromContract) => {
-        //     set_greeting(greetingFromContract);
-        //   });
-      }
-    },
-
-    // The second argument to useEffect tells React when to re-run the effect
-    // Use an empty array to specify "only run on first render"
-    // This works because signing into NEAR Wallet reloads the page
-    []
-  );
-
-  const onMove = (from, to) => {
-    const moves = chess.moves({ verbose: true });
-    for (let i = 0, len = moves.length; i < len; i++) { /* eslint-disable-line */
-      if (moves[i].flags.indexOf("p") !== -1 && moves[i].from === from) {
-        setPendingMove([from, to]);
-        setModalOpen(true);
-        return;
-      }
+  React.useEffect(() => {
+    if (window.walletConnection.isSignedIn()) {
+      // window.contract
+      //   .get_board_state({ account_id: window.accountId })
+      //   .then((greetingFromContract) => {
+      //     set_greeting(greetingFromContract);
+      //   });
     }
-    if (chess.move({ from, to, promotion: "x" })) {
-      setFen(chess.fen());
-      setLastMove([from, to]);
-      setTimeout(randomMove, 500);
-    }
+  }, []);
+
+  const showNotification = (message) => {
+    // show Notification
+    setNotificationMsg(message);
+
+    // remove Notification again after css animation completes
+    // this allows it to be shown again next time the form is submitted
+    setTimeout(() => {
+      setNotificationMsg("");
+    }, 11000);
   };
 
-  const randomMove = () => {
-    const moves = chess.moves({ verbose: true });
-    const move = moves[Math.floor(Math.random() * moves.length)];
-    if (moves.length > 0) {
-      chess.move(move.san);
-      setFen(chess.fen());
-      setLastMove([move.from, move.to]);
-    }
-  };
+  // Calls contract to create game, then routes to the game in the frontend
+  function createGame() {
+    setPendingReq(true);
+    window.contract
+      .create_game()
+      .then((gameIndex) => {
+        console.log("created game: ", gameIndex);
 
-  const promotion = (e) => {
-    const from = pendingMove[0];
-    const to = pendingMove[1];
-    chess.move({ from, to, promotion: e });
-    setFen(chess.fen());
-    setLastMove([from, to]);
-    setModalOpen(false);
-    setTimeout(randomMove, 500);
-  };
-
-  const turnColor = () => {
-    return chess.turn() === "w" ? "white" : "black";
-  };
+        // Switch route to the game index after creating
+        history.push("/" + gameIndex);
+        setPendingReq(false);
+      })
+      .catch((e) => {
+        showNotification("Failed to create new game: ", e);
+      });
+  }
 
   // if not signed in, return early with sign-in prompt
   if (!window.walletConnection.isSignedIn()) {
     /* eslint-disable */
     return (
       <main>
-      <Typography variant="h2" component="h2" gutterBottom>
-        BlockChess
-      </Typography>
+        <Typography variant="h2" component="h2" gutterBottom>
+          BlockChess
+        </Typography>
         <p>
           To play a game of blockchess, you need to be signed in with the NEAR hosted wallet.
         </p>
@@ -141,49 +118,37 @@ export default function App() {
       <main>
         <Switch>
           <Route exact path="/">
-            TODO: create game homepage
+            <div
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={createGame}
+                disabled={pendingReq}
+              >
+                Create New Game
+              </Button>
+              {/* TODO: should include ability to lookup games, either by index or referencing logged in user */}
+            </div>
           </Route>
           <Route path="/:id">
-            <>
-              <Chessground
-                turnColor={turnColor()}
-                lastMove={lastMove}
-                fen={fen}
-                onMove={onMove}
-                style={{ margin: "auto" }}
-              />
-              <Modal
-                open={modalOpen}
-                className={classes.modal}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-              >
-                <div className={classes.paper}>
-                  <span role="presentation" onClick={() => promotion("q")}>
-                    <img src={queen} alt="" style={{ width: 50 }} />
-                  </span>
-                  <span role="presentation" onClick={() => promotion("r")}>
-                    <img src={rook} alt="" style={{ width: 50 }} />
-                  </span>
-                  <span role="presentation" onClick={() => promotion("b")}>
-                    <img src={bishop} alt="" style={{ width: 50 }} />
-                  </span>
-                  <span role="presentation" onClick={() => promotion("n")}>
-                    <img src={knight} alt="" style={{ width: 50 }} />
-                  </span>
-                </div>
-              </Modal>
-            </>
+            <ChessGame />
           </Route>
         </Switch>
       </main>
-      {showNotification && <Notification />}
+      {notificationMsg && <Notification message={notificationMsg} />}
     </>
   );
 }
 
 // this component gets rendered by App after the form is submitted
-function Notification() {
+function Notification({ message }) {
   const urlPrefix = `https://explorer.${networkId}.near.org/accounts`;
   return (
     <aside>
@@ -193,11 +158,8 @@ function Notification() {
         href={`${urlPrefix}/${window.accountId}`}
       >
         {window.accountId}
-      </a>
-      {
-        " " /* React trims whitespace around tags; insert literal space character when needed */
-      }
-      called method: &apos;set_greeting&apos; in contract:{" "}
+      </a>{" "}
+      sent transaction to contract:{" "}
       <a
         target="_blank"
         rel="noreferrer"
@@ -206,9 +168,109 @@ function Notification() {
         {window.contract.contractId}
       </a>
       <footer>
-        <div>✔ Succeeded</div>
-        <div>Just now</div>
+        <div>{message}</div>
       </footer>
     </aside>
+  );
+}
+
+Notification.propTypes = {
+  message: PropTypes.string.isRequired,
+};
+
+// this component gets rendered by App after the form is submitted
+function ChessGame() {
+  const [chess] = React.useState(new Chess());
+  const [promoteMove, setPromoteMove] = React.useState();
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [fen, setFen] = React.useState("");
+  const [lastMove, setLastMove] = React.useState();
+
+  const classes = useStyles();
+
+  // react-router-dom parameters from route
+  const { id } = useParams();
+  console.log("loading game: ", id);
+
+  // * Polls for new data. This would be much better to be subscription based, but this does
+  // * not exist yet.
+  useInterval(() => {
+    // console.log("interval");
+  }, 1000);
+
+  const onMove = (from, to) => {
+    const moves = chess.moves({ verbose: true });
+    for (let i = 0, len = moves.length; i < len; i++) { /* eslint-disable-line */
+      if (moves[i].flags.indexOf("p") !== -1 && moves[i].from === from) {
+        setPromoteMove([from, to]);
+        setModalOpen(true);
+        return;
+      }
+    }
+    if (chess.move({ from, to, promotion: "x" })) {
+      setFen(chess.fen());
+      setLastMove([from, to]);
+      setTimeout(randomMove, 500);
+    }
+  };
+
+  const randomMove = () => {
+    const moves = chess.moves({ verbose: true });
+    const move = moves[Math.floor(Math.random() * moves.length)];
+    if (moves.length > 0) {
+      chess.move(move.san);
+      setFen(chess.fen());
+      setLastMove([move.from, move.to]);
+    }
+  };
+
+  const promotion = (e) => {
+    const from = promoteMove[0];
+    const to = promoteMove[1];
+    chess.move({ from, to, promotion: e });
+    setFen(chess.fen());
+    setLastMove([from, to]);
+    setModalOpen(false);
+    setTimeout(randomMove, 500);
+  };
+
+  const turnColor = () => {
+    return chess.turn() === "w" ? "white" : "black";
+  };
+
+  return (
+    <>
+      <>
+        <Chessground
+          turnColor={turnColor()}
+          // TODO have a way to show last move
+          lastMove={lastMove}
+          fen={fen}
+          onMove={onMove}
+          style={{ margin: "auto" }}
+        />
+        <Modal
+          open={modalOpen}
+          className={classes.modal}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          <div className={classes.paper}>
+            <span role="presentation" onClick={() => promotion("q")}>
+              <img src={queen} alt="" style={{ width: 50 }} />
+            </span>
+            <span role="presentation" onClick={() => promotion("r")}>
+              <img src={rook} alt="" style={{ width: 50 }} />
+            </span>
+            <span role="presentation" onClick={() => promotion("b")}>
+              <img src={bishop} alt="" style={{ width: 50 }} />
+            </span>
+            <span role="presentation" onClick={() => promotion("n")}>
+              <img src={knight} alt="" style={{ width: 50 }} />
+            </span>
+          </div>
+        </Modal>
+      </>
+    </>
   );
 }

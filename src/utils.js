@@ -25,8 +25,8 @@ export async function initContract() {
     window.walletConnection.account(),
     nearConfig.contractName,
     {
-      viewMethods: ["getBoardState"],
-      changeMethods: ["createGame", "acceptChallenge", "makeMove"],
+      viewMethods: ["get_board_state"],
+      changeMethods: ["create_game", "accept_challenge", "make_move"],
     }
   );
 }
