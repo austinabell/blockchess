@@ -30,7 +30,7 @@
     ],
     "rules": {
         "no-eval": "error",
-        "prettier/prettier": ["error"],
+        "prettier/prettier": ["warn"],
         "no-unused-vars": "warn"
     },
     "ignorePatterns": ["**/*.test.js"]
