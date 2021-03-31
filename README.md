@@ -1,6 +1,18 @@
 BlockChess
 ==================
 
+It's chess... on a blockchain.
+
+This was just built for fun and is missing some functionality, but all chess logic is performed and persisted on chain.
+
+First you need to create an account with the NEAR hosted wallet, which will prefund the account, then just click the create game button. When the game has been created, share the link with anyone and the first person to join will be the opponent.
+
+Feel free to contribute, I will only be tinkering with this in my spare time but am happy to review or help any PRs.
+
+This contract is only deployed to the testnet because the UX is a lot simpler with prefunded accounts, but it can be deployed to any NEAR chain.
+
+[Contract explorer](https://explorer.testnet.near.org/accounts/blockchess.testnet)
+
 This [React] app was initialized with [create-near-app]
 
 

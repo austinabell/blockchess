@@ -1,4 +1,4 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME || "blockchess";
+const CONTRACT_NAME = process.env.CONTRACT_NAME || "blockchess.testnet";
 
 function getConfig(env) {
   switch (env) {

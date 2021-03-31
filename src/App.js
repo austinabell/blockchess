@@ -212,7 +212,6 @@ function ChessGame() {
         } else if (boardState.black === account) {
           setUserColor("black");
         }
-        console.debug(boardState);
       })
       .catch(console.error);
   }, 1000);
